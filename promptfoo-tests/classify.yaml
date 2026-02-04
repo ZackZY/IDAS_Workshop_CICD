@@ -4,7 +4,7 @@ description: 'POST /api/ai/classify - Text Classification'
 providers:
   - id: https
     config:
-      url: 'http://localhost:8080/api/ai/classify'
+      url: 'http://localhost:8082/api/ai/classify'
       method: 'POST'
       headers:
         'Content-Type': 'application/json'

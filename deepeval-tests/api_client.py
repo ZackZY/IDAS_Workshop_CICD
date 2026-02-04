@@ -5,7 +5,7 @@ Provides helper functions to call each endpoint and return structured responses.
 
 import requests
 
-BASE_URL = "http://localhost:8080/api/ai"
+BASE_URL = "http://localhost:8082/api/ai"
 HEADERS = {"Content-Type": "application/json"}
 TIMEOUT = 120  # LLM responses can be slow
 
