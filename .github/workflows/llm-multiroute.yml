@@ -2,6 +2,7 @@
 name: LLM Multiroute CI/CD
 
 on:
+  workflow_dispatch:  # Manual trigger
   push:
     branches: [main, master]
     paths:
