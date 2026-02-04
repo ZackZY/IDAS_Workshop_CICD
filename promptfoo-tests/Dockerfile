@@ -7,12 +7,14 @@ WORKDIR /app
 COPY package.json .
 COPY *.yaml .
 
-# Add overrides to fix vulnerable transitive dependencies
+# Add overrides to fix vulnerable transitive dependencies and install locally
 RUN npm pkg set overrides.glob=11.1.0 && \
-    npm pkg set overrides.tar=7.5.7
+    npm pkg set overrides.tar=7.5.7 && \
+    npm pkg set dependencies.promptfoo=latest && \
+    npm install
 
-# Install promptfoo globally with patched dependencies
-RUN npm install -g promptfoo@latest
+# Add node_modules/.bin to PATH for promptfoo
+ENV PATH="/app/node_modules/.bin:$PATH"
 
 # Expose port for promptfoo view command
 EXPOSE 15500
