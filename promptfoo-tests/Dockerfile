@@ -7,8 +7,8 @@ WORKDIR /app
 COPY package.json .
 COPY *.yaml .
 
-# Install promptfoo globally for faster execution
-RUN npm install -g promptfoo@latest
+# Install promptfoo globally with fixed vulnerable dependencies
+RUN npm install -g cross-spawn@7.0.5 glob@10.5.0 tar@7.5.7 promptfoo@latest
 
 # Expose port for promptfoo view command
 EXPOSE 15500
