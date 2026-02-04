@@ -7,8 +7,13 @@ WORKDIR /app
 COPY package.json .
 COPY *.yaml .
 
-# Install promptfoo globally with fixed vulnerable dependencies
-RUN npm install -g cross-spawn@7.0.5 glob@10.5.0 tar@7.5.7 promptfoo@latest
+# Add overrides to fix vulnerable transitive dependencies
+RUN npm pkg set overrides.cross-spawn=7.0.5 && \
+    npm pkg set overrides.glob=10.5.0 && \
+    npm pkg set overrides.tar=7.5.7
+
+# Install promptfoo globally with patched dependencies
+RUN npm install -g promptfoo@latest
 
 # Expose port for promptfoo view command
 EXPOSE 15500

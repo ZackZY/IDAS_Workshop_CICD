@@ -9,11 +9,10 @@ import json
 import pytest
 from deepeval import assert_test
 from deepeval.test_case import LLMTestCase, LLMTestCaseParams
-from deepeval.metrics import GEval, AnswerRelevancyMetric
 from deepeval.dataset import EvaluationDataset
 
 from api_client import classify_text
-from conftest import json_schema_metric, output_correctness_metric, answer_relevancy_metric
+from conftest import json_schema_metric, answer_relevancy_metric
 
 
 # ---------------------------------------------------------------------------
