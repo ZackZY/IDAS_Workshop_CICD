@@ -1,0 +1,75 @@
+# Docker Compose for LLM Workshop Projects
+# Run with: docker-compose up --build
+
+services:
+  # FastAPI Backend API
+  llm-multiroute:
+    build:
+      context: ./llm-multiroute
+      dockerfile: Dockerfile
+    container_name: llm-multiroute
+    ports:
+      - "8082:8082"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - llm-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Flask Frontend
+  llm-frontend-python:
+    build:
+      context: ./llm-frontend-python
+      dockerfile: Dockerfile
+    container_name: llm-frontend-python
+    ports:
+      - "5000:5000"
+    environment:
+      - BACKEND_URL=http://llm-multiroute:8082
+      - FLASK_PORT=5000
+      - FLASK_DEBUG=false
+    depends_on:
+      - llm-multiroute
+    networks:
+      - llm-network
+
+  # Promptfoo Testing (runs tests, then exits)
+  promptfoo-tests:
+    build:
+      context: ./promptfoo-tests
+      dockerfile: Dockerfile
+    container_name: promptfoo-tests
+    ports:
+      - "15500:15500"
+    environment:
+      - LLM_API_BASE_URL=http://llm-multiroute:8082
+    depends_on:
+      - llm-multiroute
+    networks:
+      - llm-network
+    profiles:
+      - testing
+
+  # DeepEval Testing (runs tests, then exits)
+  deepeval-tests:
+    build:
+      context: ./deepeval-tests
+      dockerfile: Dockerfile
+    container_name: deepeval-tests
+    environment:
+      - LLM_BACKEND_URL=http://llm-multiroute:8082
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - llm-multiroute
+    networks:
+      - llm-network
+    profiles:
+      - testing
+
+networks:
+  llm-network:
+    driver: bridge
